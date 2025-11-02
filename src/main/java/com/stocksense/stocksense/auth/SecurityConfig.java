@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .addFilterBefore(authFilter, AuthorizationFilter.class)
                 .authorizeHttpRequests(
                         rq ->
-                                rq.requestMatchers("/auth/signup").permitAll()
+                                rq.requestMatchers("/auth/signup", "/auth/login").permitAll()
                                         .anyRequest().authenticated()
                 ).
                 build();

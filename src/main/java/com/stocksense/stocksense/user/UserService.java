@@ -1,10 +1,11 @@
 package com.stocksense.stocksense.user;
 
+import com.stocksense.stocksense.common.exceptions.NotFoundException;
 import com.stocksense.stocksense.common.model.AuthUser;
+import com.stocksense.stocksense.common.model.AuthUserWithPassword;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,14 @@ public class UserService {
         if (user.isEmpty()) {
             throw new RuntimeException();
         }
-        return new AuthUser(user.get().getEmail(), user.get().getName());
+        return new AuthUser(user.get().getEmail(), user.get().getName(), user.get().getCompany().getId());
+    }
+
+    public AuthUserWithPassword getUserByEmailWithPassword(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isEmpty()) {
+            throw new NotFoundException("User not found");
+        }
+        return new AuthUserWithPassword(user.get().getEmail(), user.get().getPassword());
     }
 }

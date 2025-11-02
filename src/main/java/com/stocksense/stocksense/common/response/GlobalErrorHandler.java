@@ -1,5 +1,9 @@
 package com.stocksense.stocksense.common.response;
 
+import com.stocksense.stocksense.common.exceptions.AlreadyPresentException;
+import com.stocksense.stocksense.common.exceptions.NotFoundException;
+import com.stocksense.stocksense.common.exceptions.UnAuthorizedException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,8 +22,25 @@ public class GlobalErrorHandler {
         return ResponseEntity.badRequest().body(new ErrorResponse<Map<String, String>>("Validation error", err));
     }
 
+    @ExceptionHandler(UnAuthorizedException.class)
+    public ResponseEntity<?> handleUnauthorizedError(UnAuthorizedException ex) {
+        return new ResponseEntity<>(new ErrorResponse<>(ex.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<?> handleNotFoundError(NotFoundException ex) {
+        return new ResponseEntity<>(new ErrorResponse<>(ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(AlreadyPresentException.class)
+    public ResponseEntity<?> handleAlreadyPresentExceptionError(AlreadyPresentException ex) {
+        return new ResponseEntity<>(new ErrorResponse<>(ex.getMessage()), HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleServerError(Exception ex) {
+        System.out.println("errorrrr:" + ex);
         return ResponseEntity.internalServerError().body(new ErrorResponse<>("Internal server error"));
     }
 }

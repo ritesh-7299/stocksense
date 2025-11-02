@@ -3,6 +3,9 @@ package com.stocksense.stocksense.company;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class CompanyService {
@@ -14,5 +17,9 @@ public class CompanyService {
         company.setAddress(dto.address());
         company.setLogo(dto.logo());
         return companyRepository.save(company);
+    }
+
+    public Optional<Company> getById(UUID id) {
+        return companyRepository.findById(id);
     }
 }

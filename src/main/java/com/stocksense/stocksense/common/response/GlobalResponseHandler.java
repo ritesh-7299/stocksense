@@ -27,7 +27,7 @@ public class GlobalResponseHandler implements ResponseBodyAdvice<Object> {
             ObjectMapper ob = new ObjectMapper();
             try {
                 response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-                return ob.writeValueAsString(new SuccessResponse<>("Request successful", body));
+                return ob.writeValueAsString(new SuccessResponse<>("Request successful", new StringResponse(body.toString())));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }

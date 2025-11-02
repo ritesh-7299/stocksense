@@ -11,8 +11,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    SignupResponseDto signup(@Valid @RequestBody SignupDto dto) {
+    TokenResponseDto signup(@Valid @RequestBody SignupDto dto) {
         return authService.signup(dto);
+    }
+
+    @PostMapping("/login")
+    TokenResponseDto login(@Valid @RequestBody LoginDto dto) {
+        return authService.login(dto);
     }
 
     @GetMapping("/test")

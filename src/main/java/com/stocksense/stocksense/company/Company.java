@@ -1,12 +1,12 @@
 package com.stocksense.stocksense.company;
 
 import com.stocksense.stocksense.common.model.BaseEntity;
+import com.stocksense.stocksense.product.Product;
 import com.stocksense.stocksense.user.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -19,8 +19,15 @@ public class Company extends BaseEntity {
     private String address;
 
     private String logo;
+
     @OneToOne(
             mappedBy = "company"
     )
     private User owner;
+
+    @OneToMany(
+            mappedBy = "company",
+            fetch = FetchType.LAZY
+    )
+    private List<Product> products;
 }

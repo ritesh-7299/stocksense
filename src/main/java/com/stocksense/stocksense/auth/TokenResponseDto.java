@@ -1,6 +1,6 @@
 package com.stocksense.stocksense.auth;
 
-public record SignupResponseDto(
+public record TokenResponseDto(
         String token
 ) {
 }
