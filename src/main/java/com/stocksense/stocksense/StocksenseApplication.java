@@ -9,9 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @SpringBootApplication
 public class StocksenseApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(StocksenseApplication.class, args);
     }
-
 }

@@ -1,6 +1,7 @@
 package com.stocksense.stocksense.auth;
 
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -11,8 +12,17 @@ import io.jsonwebtoken.Jwts;
 
 @Component
 public class JwtUtil {
-    private final static String SECRET = "this_is_my_secret_key_for_jwt_token_generation_123456";
-    private final static long EXPIRATION_TIME = 86400000;
+
+    private static String SECRET;
+    private static long EXPIRATION_TIME;
+
+    public JwtUtil(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiration_time}") long expirationTime
+    ) {
+        this.SECRET = secret;
+        this.EXPIRATION_TIME = expirationTime;
+    }
 
     private static Key getSignedKey() {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
