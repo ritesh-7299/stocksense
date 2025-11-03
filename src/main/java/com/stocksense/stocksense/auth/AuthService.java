@@ -21,7 +21,6 @@ public class AuthService {
 
     @Transactional
     TokenResponseDto signup(SignupDto dto) {
-        System.out.println(dto);
         Company company = companyService.createCompany(
                 new CreateCompanyDto(dto.companyName(), dto.address(), dto.companyLogo())
         );

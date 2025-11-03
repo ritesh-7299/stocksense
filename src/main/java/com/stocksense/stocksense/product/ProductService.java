@@ -22,21 +22,21 @@ public class ProductService {
 
     String create(CreateProductDto dto) {
         AuthUser authUser = authUtilsService.getCurrentUser();
-
         Company company = companyService.getById(authUser.companyId())
                 .orElseThrow(() -> new NotFoundException("Company not found"));
 
-        Optional<Product> existingProduct = productRepository.findByCompanyIdAndSku(company.getId(), dto.sku());
+        Optional<Product> existingProduct = productRepository.findByCompanyIdAndName(company.getId(), dto.name());
         if (existingProduct.isPresent()) {
-            throw new AlreadyPresentException("Product with same SKU is already present");
+            throw new AlreadyPresentException("Product with same name is already present");
         }
         Product product = new Product();
-        product.setSku(dto.sku());
         product.setCompany(company);
         product.setName(dto.name());
-        product.setQuantity(dto.quantity());
-        product.setPrice(dto.price());
         productRepository.save(product);
         return "Saved!";
+    }
+
+    public Optional<Product> getProductById(UUID id) {
+        return productRepository.findById(id);
     }
 }

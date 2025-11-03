@@ -1,21 +1,49 @@
 package com.stocksense.stocksense.product_variant;
 
 import com.stocksense.stocksense.common.model.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import com.stocksense.stocksense.product.Product;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.util.Map;
+import java.util.UUID;
+
+@Getter
+@Setter
 @Entity
 @Table(
-        name = "products",
+        name = "product_variants",
         uniqueConstraints = {
-                @UniqueConstraint(name = "uk_company_sku", columnNames = {"company_id", "sku"})
+                @UniqueConstraint(name = "uk_product_variant_company_sku", columnNames = {"company_id", "sku"})
         },
         indexes = {
-                @Index(name = "idx_product_sku", columnList = "sku"),
-                @Index(name = "idx_product_company", columnList = "company_id")
+                @Index(name = "idx_product_variant_parent", columnList = "parent_id"),
+                @Index(name = "idx_product_variant_sku", columnList = "sku")
         }
 )
 public class ProductVariant extends BaseEntity {
+    @ElementCollection
+    private Map<String, String> attributes;
+
+    private String sku;
+
+    @Column(name = "company_id", updatable = false, nullable = false)
+    private UUID companyId;
+
+    @ManyToOne
+    @JoinColumn(
+            name = "parent_id"
+    )
+    private Product parent;
+
+    @PrePersist
+    @PreUpdate
+    private void syncCompanyId() {
+        if (parent != null && parent.getCompany() != null) {
+            this.companyId = parent.getCompany().getId();
+        }
+    }
 }
+
+

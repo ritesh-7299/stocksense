@@ -1,5 +1,6 @@
 package com.stocksense.stocksense.user;
 
+import com.stocksense.stocksense.common.exceptions.AlreadyPresentException;
 import com.stocksense.stocksense.common.exceptions.NotFoundException;
 import com.stocksense.stocksense.common.model.AuthUser;
 import com.stocksense.stocksense.common.model.AuthUserWithPassword;
@@ -14,6 +15,12 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User createUser(CreateUserRequestDto dto) {
+        var eUser = userRepository.findByEmail(
+                dto.email()
+        );
+        if (eUser.isPresent()) {
+            throw new AlreadyPresentException("Email is already in use");
+        }
         User user = new User();
         user.setEmail(dto.email());
         user.setName(dto.name());

@@ -32,6 +32,11 @@ public class GlobalErrorHandler {
         return new ResponseEntity<>(new ErrorResponse<>(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleIllegalArgumentError(IllegalArgumentException ex) {
+        return new ResponseEntity<>(new ErrorResponse<>(ex.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(AlreadyPresentException.class)
     public ResponseEntity<?> handleAlreadyPresentExceptionError(AlreadyPresentException ex) {
